@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Button, Jumbotron, Container } from "react-bootstrap";
-// import { Button } from "reactstrap";
+import { Button, Jumbotron } from "react-bootstrap";
+import { connect } from "react-redux";
+import { getQuote } from "./actions";
 import "./App.css";
 import axios from "axios";
 
-function App() {
-  const [text, setText] = useState("Example text");
-  const [author, setAuthor] = useState("Example author");
+function App({ getQuote, text, author }) {
+  // const [text, setText] = useState("Example text");
+  // const [author, setAuthor] = useState("Example author");
   useEffect(() => {
-    getNewQuote();
+    // getNewQuote();
+    getQuote();
   }, []);
+  //   useEffect(() => {
+  //     setText(res.data.content);
+  //     setAuthor(res.data.author);
+  // }, [quote]);
 
   const getNewQuote = () => {
     axios.get("https://api.quotable.io/random").then(res => {
-      setText(res.data.content);
-      setAuthor(res.data.author);
+      // setText(res.data.content);
+      // setAuthor(res.data.author);
     });
   };
 
@@ -46,7 +52,8 @@ function App() {
           >
             Tweet Quote
           </a>
-          <Button id="new-quote" onClick={getNewQuote}>
+          {/* <Button id="new-quote" onClick={getNewQuote}> */}
+          <Button id="new-quote" onClick={getQuote}>
             New Quote
           </Button>
         </div>
@@ -55,4 +62,11 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  text: state.text,
+  author: state.author
+});
+export default connect(
+  mapStateToProps,
+  { getQuote }
+)(App);
